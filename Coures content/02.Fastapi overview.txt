@@ -1,0 +1,99 @@
+# fastapi overview
+## https://fastapi.tiangolo.com/tutorial/first-steps/
+สอนตาม web fast api
+
+1. create main.py file
+2. paste the following code
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+3. run live server
+uvicorn main:app --reload
+4. try move main.py to app/main.py อธิบายว่าเป็นการเตรียมโครงสร้างเพื่อเขียน test
+5. then run live server again
+uvicorn app.main:app --reload
+
+6. อธิบาย
+The command uvicorn main:app refers to:
+
+main: the file main.py (the Python "module").
+app: the object created inside of main.py with the line app = FastAPI().
+--reload: make the server restart after code changes. Only use for development.
+
+ึ7. หาบรรทัดนี้ใน terminal แล้ว ctrl คลิก เพื่อเปิด browser
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+8. จะเห็นผลลัพธ์
+{"message": "Hello World"}
+9. fast api สร้าง interactive api doc (swagger) ให้เราอัตโนมัติ ซึ่งเราสร้างเข้าถึงได้โดย พิมพ์ /docs
+http://127.0.0.1:8000/docs
+10. หรือมีอีกตัวนงชื่อ redoc
+http://127.0.0.1:8000/redoc
+11. หากเราสงสัยว่า fastapi generate redoc ให้เราได้ยังไง เราสามารกดปุ่ม download จะได้ไฟล์ openapi.json มา หรือเข้าถงผ่าน link 
+http://127.0.0.1:8000/openapi.json
+12. add json formatter extension เพื่อให้อ่านง่าย
+13. recap code step by step
+go to this link "https://fastapi.tiangolo.com/tutorial/first-steps/"
+search "Recap, step by step"
+###
+Step 1: import FastAPI
+from fastapi import FastAPI
+FastAPI is a Python class that provides all the functionality for your API.
+Step 2: create a FastAPI "instance" (ตัวแทน)
+app = FastAPI()
+ตัวแปร app จะกลายเป็น "instance" of the class FastAPI.
+เป็นจุดตั้งต้นทั้งหมดของการสร้าง API.
+เป็นตัวเดียวกับที่ถูกอ้างถึงใน uvicorn command: uvicorn main:app --reload
+ถ้าเราเปลี่ยนจาก app เป็น
+my_awesome_api = FastAPI()
+เราก็จะต้องรันคำสั่ง uvicorn เปลี่ยนไปเป็น uvicorn main:my_awesome_api --reload
+Step 3: create a path and operation
+Path คือ ไอตัว "/" ใน @app.get("/")
+บางที่เรียก "endpoint" or a "route".
+Operation หรือ HTTP Method
+POST
+GET
+PUT
+DELETE
+POST: to create data.
+GET: to read data.
+PUT: to update data.
+DELETE: to delete data.
+
+ฉะนั้นตาม route ของเรา
+@app.get("/")
+path = /
+operation = get
+อีกตัวนึงที่สำคัญคือ @
+อะไรก็ตามที่มี @ ข้างหน้า ใน python เรียก "decorator". (ของตกแต่ง)
+เราเอาวางไว้บน function. เหมือนใส่หมวกแต่งตัว (I guess thats where the term came from).
+A "decorator" takes the function below and does something with it.
+ในเคสของเรา decorator เป็นตัวบอก fastapi ว่า function ที่อยู่ข้างใต้นี้ เกี่ยวข้องกับ path "/" และ operation/method get
+It is the "path operation decorator".
+
+นั่นหมายความว่าเราใสามารถใช้ operation อื่นๆดังนี้
+You can also use the other operations:
+
+@app.post()
+@app.put()
+@app.delete()
+
+Step 4: define the path operation function
+เป็น function ของ path operation
+async def root():
+
+Step 5: return the content
+return {"message": "Hello World"}
+
+Recap
+Import FastAPI.
+Create an app instance.
+Write a path operation decorator (like @app.get("/")).
+Write a path operation function (like def root(): ... above).
+Run the development server (like uvicorn main:app --reload).

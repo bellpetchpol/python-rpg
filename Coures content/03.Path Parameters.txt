@@ -1,0 +1,99 @@
+Path Parameters
+
+1. เราประกาศ "parameters" หรือ "variables" ด้วย syntax เดียวกันกับ Python format strings:
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_item(item_id):
+    return {"item_id": item_id}
+
+2. {item_id} คือ path parameter
+3. ตัว parameter item_id จะถูกส่งต่อไปยัง function ในฐานะ argument item_id.
+@app.get("/items/{item_id}") //parameter
+async def read_item(item_id): //argument
+4. ลองเปิดด้วย /docs แล้วลอง execute ด้วยค่าที่ต่างๆกันออกไป
+
+#Path parameters with types
+1. เราสามารถระบุ type ของ path parameter ได้ด้วย standard ของ python annotations
+async def read_item(item_id: int):
+2. การระบุ type annotations ช่วยเราในหลายเรื่องเช่น editor support , error checks completion
+สมมติว่าเราเติม
+name = "bell"
+result = name + item_id
+return {"item_id": result}
+3.ลองรันจะ error เพราะ bell เป็น string item_id เป็น int
+4.ลองเปลี่ยน type เป็น str และ ลองเอา type ออก
+
+#Data conversion
+จากข้อที่แล้ว สิ่งที่ได้เพิ่มเติมมาจากการใส่ annotations คือ data conversion fastapi จะแปลงค่าจาก string เป็น int ให้เอง
+
+#Data validation
+แต่ถ้าเรากรอกข้อมูลเป็น string เช่น bell ก็จะ error เพราะหลังจากที่เราระบุ type annotations fastapi มีการทำ data validation ให้เราด้วย
+
+#Documentation
+สังเกตุว่าใน doc ของเราก็มีระบุไว้ด้วยว่าเป็นตัวแปรประเภท int 
+
+#Pydantic
+Data validation ต่างๆที่เกิดขึ้น ถูกจัดการโดย library ที่ชื่อ "pydantic" เดี๋ยวเราจะมาพูดถึงกนอีกที
+
+#Order matters
+ใน path operation การเรียงลำดับสำคัญมาก ในชีวิตจริงเป็นไปได้มากๆว่าเราจะมี path  ดังต่อไปนี้
+/users/current_user -- สมมติว่าเราใช้สำหรับ get ข้อมูล user ที่กำลัง login
+แล้วเราก็มี
+/users/{user_id} -- เอาไว้ get user by id
+เนื่องจาก path operation เวลาอ่านจะอ่านจากบนลงล่าง หากเราอยากให้ 
+/users/current_user ทำงาน ก็ต้องเอาไว้บน ถ้า fast api เจออะไรก็ตามภายใจต้ /users ที่ไม่ใช่ current_user  ก็จะไปลำดับถัดไป
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/users/me")
+async def read_user_me():
+    return {"user_id": "the current user"}
+
+
+@app.get("/users/{user_id}")
+async def read_user(user_id: str):
+    return {"user_id": user_id}
+
+
+#Path operation name could not be duplicate
+path ซ้ำกันไม่ได้ ไม่งั้นก็จะอ่านแค่อันแรกเสมอ
+
+#Predefined values
+ถ้าเราต้องการระบุว่า path parameter นั้นสามารถใส่อะไรได้บ้าง เราต้องใช้ enum
+## เป็น standard class ของ python ไม่ต้องลงอะไรเพิ่ม
+1. Import Enum and create a sub-class that inherits from str and from Enum.
+from enum import Enum
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+class ModelNameEnum(str, Enum):
+    yaris = "yaris"
+    camry = "camry"
+    civic = "civic"
+    accord = "accord"
+
+@app.get("/models/{model_name}")
+async def get_model(model_name: ModelNameEnum):
+    if model_name is ModelNameEnum.yaris:
+        return {"model_name": model_name, "message": "All new toyota YARiS ATIV!"}
+
+    if model_name.value == "camry":
+        return {"model_name": model_name, "message": "New CAMRY the absolute perfection"}
+    
+    if model_name is ModelNameEnum.civic:
+        return {"model_name": model_name, "message": "New CIVIC drive the unrival"}
+
+    return {"model_name": model_name, "message": "The Accord"}
+2. การที่เรา inherits "str" จะทำให้ API docs สามารถรู้ได้ว่า values ที่จะป้อนเข้ามาจะต้องเป็น type string เท่านั้น.
+
+

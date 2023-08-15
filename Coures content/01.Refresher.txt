@@ -1,0 +1,691 @@
+1.Install Python
+2.Install VSCode
+3.Install VSCode extension
+3.1 Python
+3.2 IntelliCode
+3.3 Python Indent
+3.4 Python Environment Manager
+
+4.Python refresher
+4.1 Create refresher.py file
+4.2 Describe python variable (int, float, string, literal)
+
+cost = 10
+tax_percent = .25
+tax = cost * tax_percent
+
+print(cost)
+print(cost * tax_percent)
+
+name = "Tochsaporn"
+surname = "Petchpol"
+print(name + " " + surname)
+
+4.3 concat string using "+" sign
+4.4 change int to str using " sign
+4.5 F formating string 
+print(f"{name} {surname}")
+
+4.6 string.format
+sentence = "Hi {}"
+print(sentence.format(name))
+
+4.7 input
+name = input("Enter your name: ")
+print(name)
+
+name = input("Enter your name: ")
+days_before_your_birthday = input("How many days before your birthday: ")
+print(f"Hi {name} only {days_before_your_birthday} before your birthday!")
+
+try enter newline 
+print(f"Hi {name} only {days_before_your_birthday} "
+        f"before your birthday!")
+
+4.8 Lists
+-- Lists are a collection of data
+my_list = [80, 96, 72, 100 ,8]
+print(my_list)
+-- list of string
+people_list = ["Bell", "Note", "Pla"]
+print(people_list)
+-- index start from 0
+print(my_list[0])
+-- try index 5 will error
+print(my_list[5])
+-- try index -1 will grab the last element
+print(my_list[-1])
+-- try change value at specifix index
+print(people_list)
+people_list[0] = "Take"
+print(people_list)
+4.9 len function
+-- count the list
+print(len(people_list))
+
+4.10 slicing
+my_list = [80, 96, 72, 100 ,8]
+print(my_list)
+people_list = ["Bell", "Note", "Pla"]
+print(people_list[0:2])
+-- ตั้งแต่ตำแหน่งที่เท่าไหร่ ถึงตำแหน่งที่เท่าไหร่ โดยไม่รวมตำแหน่งสุดท้าย
+
+4.11 append to list
+my_list.append(1000)
+
+4.12 insert to list
+my_list.insert(2, 1000)
+
+4.13 remove from the list
+my_list.remove(1000)
+
+4.14 pop from the list
+my_list.pop(0)
+-- try not specify index
+
+4.15 list.sort
+my_list.sort()
+
+4.16 set 
+"""
+Sets are similar to lists but are unordered and cannot contain duplications 
+Use curly brackets
+"""
+my_set = {1, 2, 3, 4, 5, 1, 2}
+print(my_set)
+print(len(my_set))
+-- we can loop set
+-- we will drive in to loop later
+-- mention indent
+print(my_set[0])
+-- set ไม่มี index ถ้าพยายามจะ error
+4.17 try discard from set
+my_set.discard(3)
+4.18 try clear()
+my_set.clear()
+4.19 try add
+my_set.add(6)
+4.20 try update (union)
+my_set.update([7,8,9])
+
+4.21 tuple (ทูเปิ้ล ทัปเปิ้ล)
+-- Use parenthesis ()
+my_tuple = (1, 2, 3, 4, 5, 1, 2)
+-- try print(my_tuple)
+-- try print(len(my_tuple))
+-- อ้างถึงได้ด้วย index print(my_tuple[1])
+-- assign ค่าไม่ได้ my_tuple[1] = 3 -> error
+-- ไม่มี function ในการ add update
+
+# set ใช้เวลาที่เราต้องการ sort อย่างรวดเร็ว หรือ ต้องการ ลบ duplication ออกจาก data 
+# tuple ใช้สำหรับ static list data ไม่ต้องการให้แก้ไข
+
+list set tuple
+list จะถูกใช้บ่อยที่สุด
+
+Lists Assignment
+- Create a list of 5 animals called zoo
+- Delete the animal at the 3rd index.
+- Append a new animal at the end of the list
+- Delete the animal at the beginning of the list.
+- Print all the animals
+- Print only the first 3 animals
+
+# Lists Assignment
+# - Create a list of 5 animals called zoo
+zoo = ["Bird", "Elephant", "Horse", "Parrot", "Monkey"]
+# - Delete the animal at the 3rd index.
+zoo.pop(3)
+# - Append a new animal at the end of the list
+zoo.append("Giraffe")
+# - Delete the animal at the beginning of the list.
+zoo.pop(0)
+# - Print all the animals
+print(zoo)
+for x in zoo:
+    print(x)
+# - Print only the first 3 animals
+print(zoo[0:3])
+
+4.22 Boolean and Operators
+like_coffee = True
+like_tea = False
+print(like_coffee)
+print(like_tea)
+
+like_coffee = True
+favourite_food = "Pizza"
+favourite_number = 32
+print(type(like_coffee))
+print(type(favourite_food))
+print(type(favourite_number))
+-- mostly boolean use for comparison
+print(1 == 2)
+-- google python comparison operators
+# Comparison Operators
+print(1 == 2)
+print(1 != 2)
+print(1 > 2)
+print(1 < 2)
+print(1 >= 2)
+print(1 <= 2)
+
+-- google python logical operators
+# Logical Operators
+print(1 > 3 and 5 < 7)
+print(1 > 3 or 5 < 7)
+print(not (1 == 1))
+
+4.23 Flow Control: If Else Elif
+if 1 == 1:
+    print("here")
+-- mention block of code
+if 1 == 1:
+    print("here")
+    
+print("out side of if statement")
+--Try change 
+if 1 == 2:
+    print("here")
+    
+print("out side of if statement")
+--
+x = 6
+y = 5
+if x > y:
+    print(f"{x} มากกว่า {y}")
+else:
+    print(f"{x} ไม่มากกว่า {y}")
+    
+print("out side of if statement")
+-- better understanding 
+hour = 13
+if hour < 12:
+    print("Good morning!")
+else:
+    print("Goor afternoon!")
+-- add elif
+hour = 16
+if hour < 12:
+    print("Good morning!")
+elif hour < 15:
+    print("Good afternoon!")
+elif hour < 18:
+    print("Good evening!")
+else:
+    print("Goor night!")
+
+#If Else Assignment
+#Create a variable grade holding an integer between 0 - 100
+
+#Code if, elif, else statements to print the letter grade of the number grade variable
+
+# Grades:
+# A = 90 - 100
+# B = 80 - 89
+# C = 70-79
+# D = 60 - 69
+# F = 0 - 59
+
+grade = 99
+if grade < 60:
+    print("F")
+elif grade < 70:
+    print("D")
+elif grade < 80:
+    print("C")
+elif grade < 90:
+    print("B")
+elif grade < 100:
+    print("A")
+
+grade = 44
+if grade >= 90:
+    print("A")
+elif 80 <= grade < 90:
+    print("B")
+elif 70 <= grade < 80:
+    print("C")
+elif 60 <= grade < 70:
+    print("D")
+else:
+    print("F")
+
+4.24 For & While loops
+my_list = [1, 2, 3, 4, 5]
+
+- อธิบายว่าถ้าต้องการเข้าถึงแต่ละ index ต้องลำบากแบบนี้
+# print(my_list[0])
+# print(my_list[1])
+# print(my_list[2])
+# print(my_list[3])
+# print(my_list[4])
+
+- อธิบาย for loop
+for iterator in my_list:
+    print(iterator)
+
+- อธิบาย for loop range
+for x in range(3, 6):
+    print(x)
+
+- อธิบายการใช้ for loop หาผล sum จาก list
+numbers = [1, 2, 3, 4, 5]
+
+total = 0
+
+for number in numbers:
+    total += number
+    
+print(total)
+
+- อธิบาย while loop
+i = 0
+
+while i < 5:
+    i += 1
+    print(i)
+
+- อธิบาย continue ข้าม ลูป แล้วกลับไปทำใหม่
+while i < 5:
+    i += 1
+    if i == 3:
+        continue
+    print(i)
+
+- อธิบาย while else
+else:  
+    print("The loop has finish")
+
+- อธิบาย break หยุดทำ loop นั้นไปเลย
+while i < 5:
+    i += 1
+    if i == 3:
+        continue
+    print(i)
+    if i == 4:
+        break
+else:  
+    print("The loop has finish")
+
+"""
+Loop assignment
+Given: my_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+
+- Create a while loop that prints all elements of the my_list variable 3 times.
+
+- When printing the elements, use a for loop to print the elements
+
+- However, if the element of the for loop is equal to Monday, continue without printing
+"""
+
+i = 0
+while i < 3:
+    for x in my_list:
+        if x == "Monday":
+            continue
+        print(x) 
+    print("----") 
+    i += 1
+
+"""
+Dictionaries
+"""
+
+user_dictionary = {
+    "username": "tochsapornp",
+    "name": "Bell",
+    "age": 32
+}
+print(user_dictionary)
+
+- อธิบายว่าหากต้องการ get แค่ value สามารถใช้ฟังก์ชั่น get ของ dictionary ได้
+print(user_dictionary.get("username"))
+- อธิบายว่าสามารถ เพิ่ม key value ใหม่ได้
+user_dictionary["is_admin"] = True
+- สามารถนับจำนวน key 
+print(len(user_dictionary))
+- สามารถลบ key ที่ไม่ต้องการได้ด้วย pop
+user_dictionary.pop("age")
+print(user_dictionary)
+- สามารถลบ key ออกทั้งหมดได้ด้วย clear
+user_dictionary.clear()
+print(user_dictionary)
+- สามารถ delete dictionary ออกไปเลยด้วย del
+del user_dictionary
+print(user_dictionary)
+- สามารถ loop เข้าไปได้ทั้ง key value
+for x, y in user_dictionary.items():
+    print(x, y)
+- อธิบายว่าการ assign dictionary ไปเป็นอีกตัวแปรนึงตรงๆ จะมองว่าอยู่ใน memory จุดเดียวกัน
+user_dictionary2 = user_dictionary
+user_dictionary2.pop("age")
+print(user_dictionary)
+- สามารถแก้ปัญหาได้ด้วย .copy
+user_dictionary2 = user_dictionary.copy()
+user_dictionary2.pop("age")
+print(user_dictionary)
+
+"""
+Dictionaries assignment
+
+- Base on the dictionary
+
+my_vehicle = {
+    "model": "Ford",
+    "make": "Explorer",
+    "year": 2018,
+    "mileage": 40000
+}
+
+- Create a for loop to print all keys and values
+
+- Create a new variable vehicle2, which is a copy of my_vehicle
+
+- Add a new key 'number_of_tires' to the vehicle2 variable that is equal to 4
+
+- Delete the mileage key and value from vehicle2
+
+- Print just the keys from vehicle2
+"""
+
+
+"""
+Function
+"""
+
+print("Hello welcome")
+- อธิบายว่า print ก็เป็น function ซึ่งเป็น builtin ที่ python มีให้
+- เอาเมาส์ชี้
+- ctrl + click
+- เราสามารถ สร้าง function ได้เหมือน print โดยใช้คำสั่ง def
+def my_function():
+    print("Inside my_function")
+- ลองรันดูจะไม่เห็นอะไร เพราะเรายังไม่ได้เรียกใช้
+- ลองเรียกใช้
+
+- ลองสร้างfunction ใหม่
+def print_my_name(name):
+    print(f"Hello {name}")
+    
+print_my_name("Bell")
+- แก้ function เดิม เพิ่ม นามสกุล
+def print_my_name(name, last_name):
+    print(f"Hello {name} {last_name}")
+    
+print_my_name("Tochsaporn", "Petchpol")
+
+- global and internal variable
+def print_color_red():
+    color = "red"
+    print(color)
+    
+color = "blue"
+print_color_red()
+print(color)
+
+- ระบุชื่อ parameter ที่ส่งเข้าไปในฟังก์ชั่น
+def print_numbers(highest_number, lowest_number):
+    print(highest_number)
+    print(lowest_number)
+    
+print_numbers(10, 3)
+- ถ้าลองสลับ print_numbers(3, 10) จะเห็นว่าเราอาจจะสับสนเองได้
+- เราสามารถระบุชื่อ parameter ได้เลย print_numbers(lowest_number=3, highest_number=10)
+
+- function สามารถ return ผลลัพธ์เข้าตัวแปรได้
+def multiply_numbers(a, b):
+    return a * b
+
+solution = multiply_numbers(10, 6)
+print(solution)
+
+- function ที่เรียก function อื่นอีกที
+def get_tax_from_cost(cost_of_item):
+    current_tax_rate = .03
+    return cost_of_item * current_tax_rate
+
+def add_tax_to_item(cost_of_item):
+    result = cost_of_item + get_tax_from_cost(cost_of_item)
+    return result
+
+item_include_tax = add_tax_to_item(50)
+print(item_include_tax)
+
+"""
+Function Assignment
+- Create a function that takes in 3 parameters(firstname, lastname, age) and
+
+returns a dictionary based on those values
+"""
+def create_user_dictionary(firstname, lastname, age):
+    result =  {
+        "firstname": firstname,
+        "lastname": lastname,
+        "age": age
+    }
+    return result
+    
+user_dictionary = create_user_dictionary("tochsaporn", "petchpol", 34)
+
+print(user_dictionary)
+
+# python imports
+- สร้าง folder imports
+- สร้าง ไฟล์ exam_scores.py
+exam_scores = {
+    "homework_1": 85,
+    "homework_2": 100,
+    "homework_3": 81
+}
+
+def find_average_scores(exam_scores_arg):
+    sum_of_scores = 0
+    for score in exam_scores.values():
+        sum_of_scores += score
+    average_score = round(sum_of_scores / len(exam_scores_arg),2)
+    print(average_score)
+    
+find_average_scores(exam_scores)
+
+- สร้าง ไฟล์ score_average_service.py แล้วถอด function find_average_scores มาไว้
+- import ไฟล์ score_average_service.py เข้า exam_scores
+import score_average_service
+
+exam_scores = {
+    "homework_1": 85,
+    "homework_2": 100,
+    "homework_3": 81
+}
+
+score_average_service.find_average_scores(exam_scores)
+
+"""
+Standard library comes with python
+"""
+# Random
+import random
+fruits = ["apple", "orange", "mango", "grape"]
+print(random.choice(fruits))
+
+# Random 2
+import random
+print(random.randint(1, 10))
+
+# math
+import math
+square_root = math.sqrt(64)
+print(square_root)
+
+
+"""
+Object Oriented Programming
+"""
+# - เราสร้าง ทุกอย่างให้อยู่ในรูปแบบ Object เพื่อที่จะสามารถ reuse ได้
+# - ใน python เราใช้คำสั่ง class ในการสร้าง Object
+# - แสดงให้เห็นว่า เรียกใช้ class Student เหมือนกัน แต่เป็นคนละอันกันใน memory(คนละจุด)
+class Student:
+    pass
+
+student_1 = Student()
+student_2 = Student()
+
+print(student_1)
+print(student_2)
+
+# - วิธีการ สร้าง class เพื่อ reuse
+
+class Student:
+    def __init__(self, first_name, last_name, major):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.major = major
+        
+        
+student_1 = Student("tochsaporn", "petchpol", "Computer Engineering")
+student_2 = Student("katsamapol", "petchpol", "Computer Science")
+
+print(student_1)
+print(student_2)
+
+# https://stackoverflow.com/questions/68957800/how-to-fix-pylance-syntax-highlighting-showing-wrong-color-for-self-and-cls-pyth
+# แก้ปัญหา highlight
+
+# - class สามารถมี function ได้ เราจะเพิ่ม function fullname_with_major
+
+def fullname_with_major(self):
+        return f"{self.first_name} {self.last_name} is a {self.major}"
+
+print(student_1.fullname_with_major())
+print(student_2.fullname_with_major())
+
+# - class variable
+school = "Online school"
+def fullname_with_school(self):
+        return f"{self.first_name} {self.last_name} is a {self.major} going to {self.school}"
+
+print(student_1.fullname_with_school())
+print(student_2.fullname_with_school())
+
+# - class variable 2
+number_of_students = 0
+# add this line to init 
+Student.number_of_students += 1
+# try print
+print(student_1.number_of_students)
+print(student_2.number_of_students)
+# try add this line before between after create student
+print(f"Number of student = {Student.number_of_students}")
+
+# - class method we can add declarator @classmethod เพื่อที่จะอ้างถึงตัวแปรของ class หลักได้
+@classmethod
+    def set_online_school(cls, new_school):
+        cls.school = new_school
+
+print(student_1.school)
+print(student_2.school)
+student_1.set_online_school("Bangkok university")
+print(student_1.school)
+print(student_2.school)
+
+# - class method 2
+# แสดงให้ดูก่อนว่าสามารถ split string ได้ง่ายๆ
+student_str = "bell.petchpol.math"
+first_name, last_name, major = student_str.split(".")
+print(first_name)
+
+# สร้าง class method
+@classmethod
+    def split_with_dot(cls, student_str: str):
+        first_name, last_name, major = student_str.split(".")
+        return cls(first_name, last_name, major)
+
+student_3 = Student.split_with_dot("bell.petchpol.math")
+print(student_3.first_name)
+
+# class inheritance
+class Student:
+    
+    def __init__(self, first_name, last_name):
+        self.first_name = first_name
+        self.last_name = last_name
+        
+    def greetings(self):
+        return f"Hello! I am {self.first_name} {self.last_name}"
+    
+student = Student("note", "livingos")
+
+print(student.greetings())
+
+# เพิ่ม class ใหม่
+class UniversityStudent(Student):
+    def __init__(self, first_name, last_name, major):
+        super().__init__(first_name, last_name)
+        self.major = major
+
+# เรียกใช้
+university_student = UniversityStudent("katsamapol", "petchpol", "Computer Engineering")
+
+print(university_student.greetings())
+
+# เพิ่ม class ใหม่
+class VocationalStudent(Student):
+    def __init__(self, first_name, last_name, future_adult_job):
+        super().__init__(first_name, last_name)
+        self.future_adult_job = future_adult_job
+
+# เรียกใช้
+vocation_student = VocationalStudent("katsamapol", "petchpol", "Programmer")
+print(vocation_student.greetings())
+
+#override function
+# add below function to UniversityStudent
+def greetings(self):
+        # return f"{super().greetings()} , my major is {self.major}"
+        return f"Hello! I am {self.first_name} currently study {self.major}"
+# add below fuction to VocationalStudent
+def graduated(self):
+        return f"When I graduated, I want to be a {self.future_adult_job}"
+
+# Python Virtual Environment
+1. google python venv
+https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/
+
+# How to install dependencies
+1. Use Pip
+Pip is the python package Manager
+- use to install and update packages
+2. install pip
+check pip is already install first
+python -m pip --version //window
+python3 -m pip --version //mac
+
+if not 
+python -m pip install
+
+3. check global dependency
+pip list
+
+4. create python-rpg folder
+5. ctrl+shift+p พิมพ์ "Python: Create Environment "
+6. goto .venv script activate to activate environment
+7. the we going to install fastapi and uvicorn
+pip install fastapi
+pip install "uvicorn[standard]"
+pip list to check
+8. deactivate and check pip list again
+9.try change environment name อธิบายว่า .venv อาจจะไม่สื่อว่าของ project ไหน
+10. ctrl+shift+p พิมพ์ "Python: select interpreter " เพื่อเปลี่ยน
+11. สร้าง git repo ด้วยคำสั่ง git init
+12. สร้างไฟล์ .gitignore
+13. เข้าไฟล์ https://github.com/tiangolo/fastapi/blob/master/.gitignore
+14. เพิ่ม .venv เข้าไปใน .gitignore
+15. activate อีกครั้ง
+16. รันคำสั่ง pip freeze > requirements.txt เพื่อสร้างไฟล์ requirements สำหรับ install dependency ในเครื่องอื่น
+17. deactivate
+18. ทดลองลบ folder .venv 
+19. สร้าง environment อีกครั้ง
+20. ครั้งแรก เมื่อเราสร้าง environment จะมีให้เลือกว่าจะ install dependency ไหม
+21. activate แล้ว ลง pip list
+22. สังเกตุว่าจะลงไม่สำเร็จ
+20. ให้รัน pip install -r requirements.txt
