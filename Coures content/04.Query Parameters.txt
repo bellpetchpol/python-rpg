@@ -1,0 +1,83 @@
+#Query Parameters
+
+1.เมื่อเราระบุ parameter ให้ function ซึ่งไม่ได้อยู่ใน path parameter, parameter เหล่านั้นจะถือว่าเป็น query parameter โดยอัตโนมัติ
+#async def read_item(skip: int = 0, limit: int = 10):
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+
+
+@app.get("/items/")
+async def read_item(skip: int = 0, limit: int = 10):
+    return fake_items_db[skip : skip + limit]
+
+2.query คือ ชุด ของ key-value หลายๆคู่ ซึ่งจะอยู่หลัง ? ใน URL, แต่ละคู่จะแบ่งโดยเครื่องหมาย & เช่น http://127.0.0.1:8000/items/?skip=0&limit=10
+จากตัวอย่าง the query parameters are:
+skip: with a value of 0
+limit: with a value of 10
+3.ที่จริงตอนอยู่ใน URL ทั้ง 2 คู่ก็คือ string ธรรมดา
+4.แต่ให้สังเหตุว่าตอนที่เราประกาศ function ไว้ เราระบุ type ให้เป็น int เอาไว้ด้วย ทำให้ทั้ง skip และ limit ถูก convert เป็น int โดยอัตโนมัติ
+
+process ต่างๆที่ python และ fastapi ทำให้ path parameters ก็จะทำให้ query parameters ด้วยเหมือนกัน:
+
+Editor support (obviously)
+Data "parsing"
+Data validation
+Automatic documentation
+
+#Defaults
+Query parameter จะระบุหรือไม่ก็ได้ และสามารถมีค่า default ได้
+จากตัวอย่าง async def read_item(skip: int = 0, limit: int = 10):
+ทั้ง skip และ limit มีค่า default อยู่แล้ว
+ฉะนั้น
+http://127.0.0.1:8000/items/
+ก็จะเหมือน
+http://127.0.0.1:8000/items/?skip=0&limit=10
+แต่ถ้าเรา
+http://127.0.0.1:8000/items/?skip=20
+limit จะ = 10 ตามค่า default
+skip จะ = 20 ตามที่กรอกเข้ามา
+
+#Optional parameters
+1.การประกาศ Optional query parameter ก็คือการระบุค่า None ลงไป
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: str, q: str | None = None):
+    if q:
+        return {"item_id": item_id, "q": q}
+    return {"item_id": item_id}
+
+2.ตามตัวอย่าง fastapi ฉลาดพอที่จะรู้ว่า item_id เป็น path parameter ส่วน q เป็น optional query parameter
+
+#Query parameter type conversion
+1.เราสามารถระบุ type ของ path parameter เป็น boolean ได้ fastapi ก็จะ convert ให้เหมือนกัน
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: str, q: str | None = None, short: bool = False):
+    item = {"item_id": item_id}
+    if q:
+        item.update({"q": q})
+    if not short:
+        item.update(
+            {"description": "This is an amazing item that has a long description"}
+        )
+    return item
+
+2. string ที่กรอกใน parameter type boolean กรอกได้หลายแบบ
+http://127.0.0.1:8000/items/foo?short=1
+http://127.0.0.1:8000/items/foo?short=True
+http://127.0.0.1:8000/items/foo?short=true
+http://127.0.0.1:8000/items/foo?short=on
+http://127.0.0.1:8000/items/foo?short=yes
+ถ้าระบุตามนี่ค่าจะได้ True ทั้งหมด นอกเหลือจากนี้เป็น False

@@ -687,5 +687,5 @@ pip list to check
 19. สร้าง environment อีกครั้ง
 20. ครั้งแรก เมื่อเราสร้าง environment จะมีให้เลือกว่าจะ install dependency ไหม
 21. activate แล้ว ลง pip list
-22. สังเกตุว่าจะลงไม่สำเร็จ
+22. ถ้าลงไม่สำเร็จ อาจไม่มี checkbox
 20. ให้รัน pip install -r requirements.txt

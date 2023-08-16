@@ -1,24 +1,15 @@
-from enum import Enum
-
 from fastapi import FastAPI
 
 app = FastAPI()
 
-class ModelNameEnum(str, Enum):
-    yaris = "yaris"
-    camry = "camry"
-    civic = "civic"
-    accord = "accord"
 
-@app.get("/models/{model_name}")
-async def get_model(model_name: ModelNameEnum):
-    if model_name is ModelNameEnum.yaris:
-        return {"model_name": model_name, "message": "All new toyota YARiS ATIV!"}
-
-    if model_name.value == "camry":
-        return {"model_name": model_name, "message": "New CAMRY the absolute perfection"}
-    
-    if model_name is ModelNameEnum.civic:
-        return {"model_name": model_name, "message": "New CIVIC drive the unrival"}
-
-    return {"model_name": model_name, "message": "The Accord"}
+@app.get("/items/{item_id}")
+async def read_item(item_id: str, q: str | None = None, short: bool = False):
+    item = {"item_id": item_id}
+    if q:
+        item.update({"q": q})
+    if not short:
+        item.update(
+            {"description": "This is an amazing item that has a long description"}
+        )
+    return item
