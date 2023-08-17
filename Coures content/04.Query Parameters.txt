@@ -80,4 +80,60 @@ http://127.0.0.1:8000/items/foo?short=True
 http://127.0.0.1:8000/items/foo?short=true
 http://127.0.0.1:8000/items/foo?short=on
 http://127.0.0.1:8000/items/foo?short=yes
-ถ้าระบุตามนี่ค่าจะได้ True ทั้งหมด นอกเหลือจากนี้เป็น False
+ถ้าระบุตามนี่ค่าจะได้ True ทั้งหมด นอกเหนือจากนี้เป็น False
+
+#Multiple path and query parameters
+1.เราสามารถมี path และ query parameter กี่อันก็ได้ FastAPI จะรู้เองว่าอันไหนเป็นอันไหน
+2.ใน fastapi ลำดับของ path parameter ไม่มีผล เพราะถูกอ้างถึงด้วยชื่ออยู่แล้ว
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/users/{user_id}/items/{item_id}")
+async def read_user_item(
+    user_id: int, item_id: str, q: str | None = None, short: bool = False
+):
+    item = {"item_id": item_id, "owner_id": user_id}
+    if q:
+        item.update({"q": q})
+    if not short:
+        item.update(
+            {"description": "This is an amazing item that has a long description"}
+        )
+    return item
+
+#Required or non required query parameters
+1.เมื่อเราระบุ ค่า default ให้ query parameter จะทำ parameter เหล่านั้นเป็น แบบไม่ required คือมีอยู่แล้วไม่จำเป็นต้องระบุเพิ่ม แต่ไม่ใช้ optional จริง หากต้องการให้เป็น optional ให้ set ค่า default เป็น None หากต้องการให้เป็น required parameter ก็แค่เอาออกทุกอย่าง
+ให้เราพิมพ์ตามนี้
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_user_item(item_id: str, needy: str):
+    item = {"item_id": item_id, "needy": needy}
+    return item
+
+2.จะเห็นว่า query parameter "needy" เป็น required parameter type string
+3.ถ้าเราเข้าถึง url โดย ไม่ใส่ query parameter "needy" เช่น
+http://127.0.0.1:8000/items/foo-item
+ระบบก็จะ return error ออกมา
+4.แต่ถ้าใส่ query parameter "needy" ก็จะเรียกได้ไม่มีปัญหาอะไร
+http://127.0.0.1:8000/items/foo-item?needy=sooooneedy
+5.ซึ่งแน่นอน เราสามารถมี query parameter ที่เป็นแบบ required และ มีแบบที่มี default และแบบที่เป็น optional อยู่รวมกันได้ เช่น
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_user_item(
+    item_id: str, needy: str, skip: int = 0, limit: int | None = None
+):
+    item = {"item_id": item_id, "needy": needy, "skip": skip, "limit": limit}
+    return item
+

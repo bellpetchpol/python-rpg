@@ -1,0 +1,7 @@
+#Request Body
+1.เวลาที่เราต้องการส่งข้อมูลจาก client (เช่นจาก browser) ไปยัง API ของเรา เราจะส่งมาด้วยสิ่งที่เรียกว่า "request body"
+2.ในทางกลับกันถ้าเป็น API ส่งข้อมูลกลับมาให้ client (จากตัวอย่างคือ browser) เราจะเรียกสิ่งนั้นว่า response body
+3.อันที่จริง ตัว API เองนั่นแหละที่จะมีการส่งข้อมูลกลับไปหา client ทุกครั้ง แต่ตัว client เอง ไม่จำเป็นต้องส่งข้อมูลอะไรมายัง API
+4.ใน fastapi เราจะประกาศ body ด้วยสิ่งที่เรียกว่า "Pydantic model"
+เปิด slide เพื่อ อธิบาย
+https://docs.google.com/presentation/d/1pdKFabIJTj01NYqShyFk9Znngitaq3zlngXxpccLJNs/edit#slide=id.g27483b1b4b4_0_9
