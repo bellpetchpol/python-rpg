@@ -1,0 +1,115 @@
+#Query Parameters and String Validations
+การทำ validation ใน fastapi เท่าที่เราเคยเห็นผ่านมาคือ
+การระบุ type เป็น str 
+การกำหนด default value
+การทำให้เป็น optional
+ซึ่งจริงๆมีมากกว่านั้นอีกเช่นเราสามารถกำหนเได้ว่าตัวอักษรจะต้องไม่เกินกี่ตัว
+
+ลองดูตัวอย่างต่อไปนี้
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/")
+async def read_items(item_name: str | None = None):
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if item_name:
+        results.update({"item_name": item_name})
+    return results
+
+จากตัวอย่างจะเป็นแค่การ validation เบื้องต้นอย่างที่เคยทำมา
+
+สิ่งที่เราจะเพิ่มต่อไปคือ เราจะจำกัดให้ item_name มีตัวอักษรได้ไม่เกิน 50 ตัว
+1.Import Query from fastapi
+2.Import Annotated from typing
+from typing import Annotated
+from fastapi import FastAPI, Query
+3. เราจะใช้ Annotated wrap "type" ของ parameter  "str | None"
+*Annotated ใช้สำหรับเพิ่มคำอธิบายให้กับ parameter 
+4. ใน Annotated เราจะเพิ่ม Query ที่เรา import เอาไว้แล้วต่อจาก type คั่นด้วยคอมม่า ","
+async def read_items(item_name: Annotated[str | None, Query(max_length=50)] = None):
+5. สังเกตุว่า default value ยังคงเป็น None,ดังนั้น parameter นี้ก็ยังคงเป็น optional.
+และพอเราใส่ Query(max_length=50) เข้าไปใน Annotated, เรากำลังบอก FastAPI ว่าเราต้องการถอดค่าออกมาจาก query parameters (ซึ่งจากตัวอย่างก็จะได้ค่า default อยู่ดี) และเราก็ต้องการให้มี validation เพิ่มเติมสำหรับค่าที่ป้อนเข้ามานี้
+
+FastAPI จะทำสิ่งต่อไปนี้ให้เรา:
+1.validate ว่าข้อมูลจะต้องไม่เกิน 50 ตัวอักษร
+2.หากมี error ก็จะมาพร้อมคำอธิบายที่ชัดเจน
+3.ทำ Document ให้ ไม่ว่าจะเป็น swagger / redoc
+
+### Alternative (old) Query as the default value
+FastAPI เวอร์ชั่นเก่ากว่า 0.95.0 จะไม่ได้ใช้ query แบบที่เราพึ่งทำกันไป(ใส่ใน Annotated หลัง type) แต่จะต้องใช้ query เป็น default value แทนเลย ซึ่งมีโอกาศทีเราจะเจอในโค้ดเก่าๆ ฉะนั้นเราจะมาดูกันซักหน่อย
+หน้าตาจะเป็นแบบนี้
+async def read_items(q: str | None = Query(default=None, max_length=50)):
+ให้เราเอา from typing import Annotated ออกด้วย
+
+ใน case นี้(ไม่ใช้ Annotated) เราจะทำการแทนที่ default value None ด้วย Query() ซึ่งพอทำแบบนี้เราก็เลยมีความจำเป็นต้องระบุลงไปใน Query ว่าค่า default คืออะไรอีกครั้งหนึ่งเช่น Query(default=None) 
+สังเกตุจุดที่เปลี่ยนไปคือ 
+= None
+เป็น
+= Query(default=None)
+ซึ่งจริงๆทั้งสองตัว ค่า None เป็นตัวบอกว่า parameter ตัวนี้ไม่จำเป็นต้องระบุ
+
+ถ้าใน python เวอร์ชั่นเก่า เราก็อาจจะเห็นจุดที่ต่างไปอีกจุดคือ 
+แทนที่ type จะเป็น str | None 
+แต่จะเป็น Union[str, None] แทน
+
+ซึ่งจากตัวอย่างด้านบน คนที่เคยใช้ default แบบเวอร์ชั่นเก่า พอเปลี่ยนมาใช้ Annotated อาจทำให้เกิดความสับสนนึกว่าพอย้าย query มาไว้ใน Annotated แล้ว จะยังใส่ default value ได้
+เช่น เราไม่สามารถพิมพ์แบบนี้ได้
+q: Annotated[str, Query(default="rick")] = "morty"
+ถ้าทำแบบนี้ไม่ต้อง fastapi หลอก เราอ่านเองยังงง เลยว่า default เป็น rick หรือ morty
+
+#Add more validations
+1.เราสามารถ add parameter min_length ได้ด้วยเช่น
+Query(min_length=3, max_length=50)
+
+2.หรือแม้กระทั่งใช้ regular expressions
+*A regular expressions ,regex or regexp is a sequence of character that define a search pattern for strings
+3.แปลแบบบ้านๆน่าจะได้ประมาณว่า รูปแบบของตัวอักษรที่ใช้ในการค้นหา (เรามีตัวอักษรชุดนึง ต้องการให้นะบบค้นหาด้วยรูปแบบนี้) 
+4.นึกถึงแม่พิมพ์ขนม หากต้องการทำวุ้นเป็ด เราก็ต้องมีแม่พิม์หรือ pattern เป็ดก่อน
+5.ต่อไปจะใช้คำว่า match pattern ของ regular expressions เช่น
+Query(min_length=3, max_length=50, pattern="^fixedquery$")
+
+This specific regular expression pattern checks that the received parameter value:
+
+^: starts with the following characters, doesn't have characters before.
+fixedquery: has the exact value fixedquery.
+$: ends there, doesn't have any more characters after fixedquery.
+
+ถ้าใครรู้สึกว่า regular expression มันยากไป ก็ไม่เป็นไร สิ่งนี้เป็นเรื่องยากสำหรับหลายๆคน เราสามารถสร้าง api ได้โดยไม่ใช้ regexp ด้วยซ้ำ
+แต่ให้เรารู้ไว้ว่าเมื่อไหรที่เราต้องใช้เราก็ไปเรียนเพิ่มเติม และ FastAPI ก็สามารถใช้ regexp ได้ทันที
+
+ุ6. เราสามารถบอกว่า Parameter q มี default value เป็น "fixedquery"
+async def read_items(q: Annotated[str, Query(min_length=3)] = "fixedquery"):
+ึ7. หรือทำให้เป็น required parameter ก็แค่เอา = "fixedquery" ออก
+
+
+#Query parameter ในรูปแบบ list / multiple values
+1. พอเรามาใช้ Query ของ fastapi ช่วย มี feature นึงที่น่าสนใจมากคือเราสามารถมี query parameter ที่รับ value ได้มากกว่า 1 ครั้ง ซึ่ง value ที่รับเข้ามา จะอยู่ใน type list
+เช่น items/?item_name=book&item_name=pen
+
+from typing import Annotated
+
+from fastapi import FastAPI, Query
+
+app = FastAPI()
+
+
+@app.get("/items/")
+async def read_items(item_name: Annotated[list[str], Query()]):
+    query_items = {"item_name": item_name}
+    return query_items
+
+หากเราต้องการให้ query parameter item_name เป็น optional เราสามารถใช้ class Union ของ typing ได้
+2. เพิ่ม Union ที่ท่อน import
+from typing import Annotated, Union
+3. เปลี่ยนท่อน define function
+async def read_items(item_name: Annotated[Union[list[str], None], Query()] = None):
+4. ลองทดสอบดูใน swagger เราจะไม่ต้องใส่อะไรเลยได้ แต่จะไม่มีตัวช่วยให้เรารุบ string แล้ว เราจะสามารถทดสอบได้จากการยิง api ตรงๆเท่านั้น
+reponse body จะเป็น
+{
+  "item_name": null
+}
+5.หรืออีกวิธีคือใช้ default value เป็น empty list
+async def read_items(item_name: Annotated[list[str], Query()] = []):
+

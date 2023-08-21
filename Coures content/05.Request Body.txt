@@ -64,7 +64,7 @@ async def create_item(item: Item):
 1.ใน editor ของเรา ในฟังก์ชั่นเราจะได้ type hints และ completion ทุกๆที่ สิ่งเหล่านี้จะไม่มีถ้าเรา post ข้อมูลมาเป็น json ตรงๆ (dict)
 เช่น item.name.
 
-2.เรายังได้ error check เช่น item.name + item.price
+2.เรายังได้ error check เช่น ลองพิมพ์ item.name + item.price
 ** ถ้าไม่มีให้ลง 
 2.1 extension mypy (ตัวที่ไม่ใช่ของ microsoft)
 2.2 ไปที่ extension คลิกปุ่มฟันเฟืองเพื่อ > extension setting
@@ -72,5 +72,25 @@ async def create_item(item: Item):
 2.4 และลง pip install mypy 
 2.5 จะเห็นว่าได้แล้ว
 
+#Use the model
+1.ใน function, เราสามารถเข้าถึง attributes of the model object ได้โดยตรง:
+เช่นเราจะลบ route เก่าออกใช้อันนี้แทน
+@app.post("/items/")
+async def create_item(item: Item):
+    item_dict = item.dict()
+    if item.tax:
+        price_with_tax = item.price + item.tax
+        item_dict.update({"price_with_tax": price_with_tax})
+    return item_dict
+
+item_dict = item.dict() // แปลงค่า pydantic model เป็น dict
+
 #Request body + path parameters
 เราสามารถมี path parameters + request body ได้ พร้อมกัน
+@app.put("/items/{item_id}")
+async def create_item(item_id: int, item: Item):
+    return {"item_id": item_id, **item.dict()}
+
+fastapi จะรู้เองว่าตัวแปรที่อยู่ใน path เป็น path parameter ส่วนตัวแปรที่เป็น type pydantic model เป็น request body
+
+** หรือจะมี query parameter ด้วยก็ได้

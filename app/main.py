@@ -1,16 +1,11 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from typing import Annotated
 
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
+from fastapi import FastAPI, Query
 
 app = FastAPI()
 
 
-@app.post("/items/")
-async def create_item(item: Item):
-   
-    return item
+@app.get("/items/")
+async def read_items(item_name: Annotated[list[str], Query()] = []):
+    query_items = {"item_name": item_name}
+    return query_items 
