@@ -5,3 +5,72 @@
 4.ใน fastapi เราจะประกาศ body ด้วยสิ่งที่เรียกว่า "Pydantic model"
 เปิด slide เพื่อ อธิบาย
 https://docs.google.com/presentation/d/1pdKFabIJTj01NYqShyFk9Znngitaq3zlngXxpccLJNs/edit#slide=id.g27483b1b4b4_0_9
+
+5. ในการส่งข้อมูล เราควรใช้ POST PUT DELETE หรือ PATCH (ซึ่ง POST จะถูกใช้บ่อยมากที่สุด)
+6. การส่งข้อมูลด้วย method GET (แบบมี body) ใน document เขาใช้คำว่า "has an undefined behavior" พฤติกรรมที่ระบุไม่ได้ ถึงแม้ยังงั้น fastapi ก็ support นะ แต่เราก็ไม่ควรใช้อยู่ดี
+7.fastapi support ก็จริง แต่ swagger ui ไม่ support body จะไม่แสดงหากเป็น method get และอาจมีเรื่องอื่นๆที่ไม่ support อีก
+
+Import Pydantic's BaseModel
+
+1.เราจะมาเริ่มใช้ โดยเราต้อง import library Pydantic ตัว BaseModel ก่อน
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+2.จากนั้นเราจะประกาศ data model (dto) เป็น class ที่ inherit จาก BaseModel (จาก pydantic อีกที)
+3.เราสามารใช้ standard python type กับทุกๆ attributes ได้
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
+app = FastAPI()
+
+
+@app.post("/items/")
+async def create_item(item: Item):
+    return item
+
+4. สังเกตุว่าใน dto ที่เราสร้างเรามีทำให้บาง attribute สามารถเป็น optional ได้ด้วย ซึ่งสามารถทำได้ทุกอย่างเหมือน query parameters ไม่ว่าจะเป็น default value, optional, required
+5. ยกตัวอย่างหากเรามี JSON "object" (or Python dict) ตาม dto ที่ประกาศไว้เช่น
+{
+    "name": "Foo",
+    "description": "An optional description",
+    "price": 45.2,
+    "tax": 3.5
+}
+ุ6.แต่ตาม dto attribute description และ tax บอกว่าเป็น optional นั่นหมายความว่าเราไม่ต้องส่งเข้ามาก็ได้ เช่น
+{
+    "name": "Foo",
+    "price": 45.2
+}
+
+7.ต่อไปเรามาดูบรรทัดที่นำ dto ไปใช้
+async def create_item(item: Item):
+เพียงแค่เราระบุ type เป็น pydantic model fastapi จะรู้เองว่าสิ่งนี้คือ body
+8.ซึ่งผลลัพธ์ของมัน 
+8.1 fastapi จะอ่านค่าที่ถูกส่งเข้ามาใน body เป็นรูปแบบ json
+8.2 แปลงค่าตาม type ที่ถูกระบุไว้ใน attribute ต่างๆ
+8.3 ทำ data validation
+8.4 ถ้า data ไม่ valid fastapi จะ return error ออกมา
+8.5 editor support , completion
+
+#Automatic docs
+ลองรันดูเราจะเห็นว่า fastapi จัดการสร้าง swagger ui ให้เราเรียบร้อย
+
+#Editor support
+1.ใน editor ของเรา ในฟังก์ชั่นเราจะได้ type hints และ completion ทุกๆที่ สิ่งเหล่านี้จะไม่มีถ้าเรา post ข้อมูลมาเป็น json ตรงๆ (dict)
+เช่น item.name.
+
+2.เรายังได้ error check เช่น item.name + item.price
+** ถ้าไม่มีให้ลง 
+2.1 extension mypy (ตัวที่ไม่ใช่ของ microsoft)
+2.2 ไปที่ extension คลิกปุ่มฟันเฟืองเพื่อ > extension setting
+2.3 เลือก check box run mypy using active interpreter
+2.4 และลง pip install mypy 
+2.5 จะเห็นว่าได้แล้ว
+
+#Request body + path parameters
+เราสามารถมี path parameters + request body ได้ พร้อมกัน
