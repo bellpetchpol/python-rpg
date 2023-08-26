@@ -1,0 +1,31 @@
+Path Parameters and Numeric Validations
+1.เหมือนกับที่เราสามารถมี validation ต่างๆได้ใน query parameter / path parameter ก็สามารถทำได้เช่นกัน
+2.แต่สำหรับ path เราไม่ได้ใช้ฟังก์ชั่น Query แต่จะใช้ function ชื่อ path แทน
+3. import Path from fastapi, and import Annotated from typing
+
+from typing import Annotated
+
+from fastapi import FastAPI, Path, Query
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_items(
+    item_id: Annotated[int, Path(ge=1)],
+    item_name: Annotated[str | None, Query(min_length=3)] = None,
+):
+    results = {"item_id": item_id}
+    if item_name:
+        results.update({"item_name": item_name})
+    return results
+
+4. ge = greater or equal
+5.มีอะไรบ้าง
+ge = greater or equal (มากกว่าหรือเท่ากับ)
+gt = greater than (มากกว่า)
+lt = less than (น้อยกว่า)
+le = less or equal (น้อยกว่าหรือเท่ากับ)
+6. สามารถระบุ type เป็น float ได้ เช่นเพิ่ม query parameter
+item_size: Annotated[float | None, Query(gt=0, lt=10.5)] = None,
+

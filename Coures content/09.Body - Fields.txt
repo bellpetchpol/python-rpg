@@ -1,0 +1,8 @@
+#Body - Fields
+1.ใน body ก็สามารถทำ validation ได้ โดยจะทำผ่าน function Fields import จาก pydantic
+from pydantic import BaseModel, Field
+2.จากนั้นนำไปใช้กับ attribute 
+description: str | None = Field(
+    default=None, max_length=300
+)
+price: float = Field(gt=0)

@@ -117,6 +117,5 @@ async def read_items(item_name: Annotated[list[str], Query()] = ["book", "pen"])
 ใน swagger จะมีค่า default ให้ แต่ถ้าเราเรียกผ่าน url http://127.0.0.1:8000/items/ ก็จะเหมือนกัน
 7.เราใช้ list เป็น type เฉยๆ ไม่ต้องระบุ type ใน list ก็ได้ แต่จะไม่ได้ feature convert หากระบุค่ามาเป็น int
 async def read_items(item_name: Annotated[list, Query()] = ["book", "pen"]):
-8.เราสามารถใส่ alias ให้ query parameter name ได้
-เช่น item_name มี alias เป็น name
+
 

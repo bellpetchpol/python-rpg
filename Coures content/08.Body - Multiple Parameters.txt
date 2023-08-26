@@ -1,0 +1,46 @@
+#Body - Multiple Parameters
+1.เราเรียนรู้ไปแล้วว่าถ้าเราจะ post put patch การส่งข้อมูลต้องส่งผ่าน pydantic model ดังตัวอย่างต่อไปนี้
+
+from typing import Annotated
+
+from fastapi import FastAPI, Path
+from pydantic import BaseModel
+
+app = FastAPI()
+
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
+
+@app.put("/items/{item_id}")
+async def update_item(
+    item_id: Annotated[int, Path(ge=0, le=1000)],
+    item: Item | None = None,
+):
+    results = {"item_id": item_id}
+    if item:
+        results.update({"item": item})
+    return results
+
+2.สังเกตุว่า parameter "Item" มีระบุไว้ให้เป็น optional เราสามารถทดลองส่งข้อมูลมาได้
+3.ใน fastapi ตัว body ที่เราส่งมาสามารถประกอบจาก pydantic model มากกว่า 1 ตัวได้
+4.โดยเราจะเพิ่ม class ใหม่อีก 1 class
+class User(BaseModel):
+    username: str
+    full_name: str | None = None
+5.เพิ่ม parameter อีก 1 ตัว
+, user: User
+6.ทดลองดูจะเห็นว่า body จะประกอบไปด้วย object ที่มี key 2 key แทน
+
+#Singular values in body
+1.ตอนนี้เราได้ body ที่มี 2 key แล้ว โดยแต่ละ key มี class pydantic model เป็นของตัวเอง แต่ถ้าเราอยากเพิ่ม key เป็นแบบ single value ไม่ได้มี object อยู่ข้างในเราจะต้องทำตามนี้
+2.เพิ่ม parameter ใหม่ 
+importance: Annotated[int, Body()],
+
+#Embed a single body parameter
+1.ย้อนกลับไปตอนที่เราเริ่มลองใช้ pydantic model เพิ่ม parameter เป็น body ครั้งแรก ถ้าจำได้ ตัว body จะไม่มี key ซึ่งถ้าเรามี parameter เดียว และอยากให้มี key เหมือนที่เรามี parameter 2 ตัว สามารถเพิ่ม Annotated ดังตัวอย่างต่อไปนี้
+item: Annotated[Item, Body(embed=True)]
