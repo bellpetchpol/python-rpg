@@ -1,29 +1,18 @@
-from typing import Annotated
-
-from fastapi import Body, FastAPI, Path
-from pydantic import BaseModel, Field
+from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
 
 class Item(BaseModel):
     name: str
-    description: str | None = Field(
-        default=None, max_length=300
-    )
-    price: float = Field(gt=0)
+    description: str | None = None
+    price: float
     tax: float | None = None
-    
-class User(BaseModel):
-    username: str
-    full_name: str | None = None
+    tags: set[str] = set()
 
 
 @app.put("/items/{item_id}")
-async def update_item(
-    item_id: Annotated[int, Path(ge=0, le=1000)],
-    item: Annotated[Item, Body(embed=True)]
-    
-):
+async def update_item(item_id: int, item: Item):
     results = {"item_id": item_id, "item": item}
     return results

@@ -1,0 +1,19 @@
+#Body - Nested Models
+1. ใน Body ใส่ type เป็น List ก็ได้ เช่น
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+    tags: list = []
+
+2.ที่ชี้ประเด็นนี้ขึ้นมาเพราะว่าใน attribute type list นี้ สามารถเพิ่มให้ validate ได้ว่าจะต้องระบุมาเป็น int/str เท่านั้น เช่น
+tags: list[str] = []
+
+3.บางครั้งเราอาจต้องการให้ list ของข้อมูลนี้ไม่ซ้ำกันแทนที่เราจะ validate ใน code เราสามารถใช้ type set จัดการเรื่องนี้ได้ python จะจัดการ validate ให้เราเอง
+เช่น 
+tags: set[str] = set()
+
+3.ตัวอย่างเช่น เราอาจจะอย่างลบข้อมูล Item เป็น lot แล้วต้องการส่งข้อมูลมาเป็น array ของ item_id ใน python เรามี type อยู่ประเภทนึงที่เหมาะสมกับเรื่องนี้ คืออะไร?
+
+
