@@ -1,0 +1,10 @@
+Dependency injection
+ใน fastapi ก็มี 
+Dependency = ขึ้นอยู่กับ
+Dependencies คือสิ่งต่างๆที่เราจำเป็นต้องใช้
+inject = ฉีด (เหมือนฉีดยา)
+Dependency injection เหมือนการฉีดฟังก์ชั่นที่จำเป็นต้องใช้ให้ไหลเข้ามาใน class ที่เรากำลังทำงานอยู่
+
+ซึ่งเป็นวิธีการที่ดีมากเวลาที่เราต้องการจะ
+1.ใช้ logic เดิมซ้ำๆหลายๆที่ (เช่น logic ในการทำ login authentication หรือการกำหนดสิทธิต่างๆ)
+2.Share database connections connect ที่เดียวใช้ได้ทุกที่

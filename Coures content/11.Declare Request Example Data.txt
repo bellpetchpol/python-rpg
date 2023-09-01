@@ -1,0 +1,59 @@
+#Declare Request Example Data
+เราสามารถปรับแต่ง Example ที่ปรากฏใน swagger ได้
+ซึ่งทำได้หลากหลายวิธีมากๆ
+วิธีที่ 1 เพิ่ม json_schema_extra ใน attribute model_config ของ pydantic model เช่น
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "name": "item1",
+                    "description": "A very nice Item",
+                    "price": 35.4,
+                    "tax": 3.2,
+                }
+            ]
+        }
+    }
+
+
+@app.put("/items/{item_id}")
+async def update_item(item_id: int, item: Item):
+    results = {"item_id": item_id, "item": item}
+    return results
+
+# ลองทดสอบดูก็จะเห็น example แล้ว
+วิธีที่ 2 ใช้ function Field ของ pydantic model
+class Item(BaseModel):
+    name: str = Field(examples=["item1"])
+    description: str | None = Field(
+        default=None, examples=["A very nice item!"])
+    price: float = Field(examples=[35.4])
+    tax: float | None = Field(default=None, examples=[3.2])
+
+วิธีที่ 3 ระบุใน Annotated Body
+item: Annotated[
+        Item,
+        Body(
+            examples=[
+                {
+                    "name": "Foo",
+                    "description": "A very nice Item",
+                    "price": 35.4,
+                    "tax": 3.2,
+                }
+            ],
+        )
+    ]

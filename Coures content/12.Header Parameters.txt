@@ -1,0 +1,30 @@
+Header Parameters
+1.ในบางครั้งเราจะเป็นต้อง อ่านข้อมูลจาก header เช่น เราอาจจะระบุ authentication key มาใน header ชื่อ Token เป็นต้น
+2.เช่น
+from typing import Annotated
+
+from fastapi import FastAPI, Header
+
+app = FastAPI()
+
+
+@app.get("/items/")
+async def read_items(token: Annotated[str | None, Header()] = None):
+    return {"Token": token}
+
+3.สิ่งสำคัญที่พวกเราต้องรู้คือ
+3.1 server ไม่รับ header ที่มี underscore
+3.2 standard header เช่น user-agent จะคั่นด้วย hyphen หรือ ขีดกลาง
+3.3 แต่ python code ส่วนมากเราจะเป็น snake_case 
+3.4 fastapi จะทำหน้าที่ convert ให้เราอัตโนมัติ เช่น
+async def read_items(
+    token: Annotated[str | None, Header()] = None,
+    user_agent: Annotated[str | None, Header()] = None
+):
+    return {"Token": token, "User-agent": user_agent}
+3.5 ลองทดสอบดู และไม่ต้องใส่ user_agent
+
+4. header parameter ก็สามารถส่งค่ามากกว่ากว่า 1 ได้เช่น
+async def read_items(x_token: Annotated[list[str] | None, Header()] = None):
+    return {"X-Token values": x_token}
+4.1 ต้องทดสอบใน postman
